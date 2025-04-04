@@ -1,6 +1,6 @@
 # AnimateDiff
 
-This repository is the official implementation of [AnimateDiff](https://arxiv.org/abs/2307.04725).
+This repository is sourced from the official implementation of [AnimateDiff](https://arxiv.org/abs/2307.04725) and has been modified for SDI-Paste. Thank you to Gao _et al._ for their incredible work.
 
 **[AnimateDiff: Animate Your Personalized Text-to-Image Diffusion Models without Specific Tuning](https://arxiv.org/abs/2307.04725)**
 </br>
@@ -106,14 +106,20 @@ bash download_bashscripts/0-MotionModule.sh
 You may also directly download the motion module checkpoints from [Google Drive](https://drive.google.com/drive/folders/1EqLC65eR1-W-sGD0Im7fkED6c8GkiNFI?usp=sharing) / [HuggingFace](https://huggingface.co/guoyww/animatediff) / [CivitAI](https://civitai.com/models/108836), then put them in `models/Motion_Module/` folder.
 
 ### Prepare Personalize T2I
-Here we provide inference configs for 6 demo T2I on CivitAI.
-You may run the following bash scripts to download these checkpoints.
+
+[//]: # (Here we provide inference configs for 6 demo T2I on CivitAI.)
+
+We use the 5-RealisticVision style T2I checkpoint to generate the most realistic-looking instances.
+You may run the following bash scripts to download the checkpoint.
+```
+bash download_bashscripts/5-RealisticVision.sh
+```
+Other styles are also available:
 ```
 bash download_bashscripts/1-ToonYou.sh
 bash download_bashscripts/2-Lyriel.sh
 bash download_bashscripts/3-RcnzCartoon.sh
 bash download_bashscripts/4-MajicMix.sh
-bash download_bashscripts/5-RealisticVision.sh
 bash download_bashscripts/6-Tusun.sh
 bash download_bashscripts/7-FilmVelvia.sh
 bash download_bashscripts/8-GhibliBackground.sh
@@ -122,14 +128,7 @@ bash download_bashscripts/8-GhibliBackground.sh
 ### Inference
 After downloading the above peronalized T2I checkpoints, run the following commands to generate animations. The results will automatically be saved to `samples/` folder.
 ```
-python -m scripts.animate --config configs/prompts/1-ToonYou.yaml
-python -m scripts.animate --config configs/prompts/2-Lyriel.yaml
-python -m scripts.animate --config configs/prompts/3-RcnzCartoon.yaml
-python -m scripts.animate --config configs/prompts/4-MajicMix.yaml
 python -m scripts.animate --config configs/prompts/5-RealisticVision.yaml
-python -m scripts.animate --config configs/prompts/6-Tusun.yaml
-python -m scripts.animate --config configs/prompts/7-FilmVelvia.yaml
-python -m scripts.animate --config configs/prompts/8-GhibliBackground.yaml
 ```
 
 To generate animations with a new DreamBooth/LoRA model, you may create a new config `.yaml` file in the following format:
@@ -153,47 +152,79 @@ NewModel:
 ```
 Then run the following commands:
 ```
-python -m scripts.animate --config [path to the config file]
+python -m scripts.animate_sdipaste --config [path to the config file]
 ```
 
 
 ## Steps for Training
 
-### Dataset
-Before training, download the videos files and the `.csv` annotations of [WebVid10M](https://maxbain.com/webvid-dataset/) to the local mechine.
-Note that our examplar training script requires all the videos to be saved in a single folder. You may change this by modifying `animatediff/data/dataset.py`.
-
-### Configuration
-After dataset preparations, update the below data paths in the config `.yaml` files in `configs/training/` folder:
-```
-train_data:
-  csv_path:     [Replace with .csv Annotation File Path]
-  video_folder: [Replace with Video Folder Path]
-  sample_size:  256
-```
-Other training parameters (lr, epochs, validation settings, etc.) are also included in the config files.
-
-### Training
-To train motion modules
-```
-torchrun --nnodes=1 --nproc_per_node=1 train.py --config configs/training/training.yaml
-```
-
-To finetune the unet's image layers
-```
-torchrun --nnodes=1 --nproc_per_node=1 train.py --config configs/training/image_finetune.yaml
-```
+If you want to train AnimateDiff from scratch, please see instructions on the original repo: https://github.com/guoyww/AnimateDiff
 
 
-## Gradio Demo
-We have created a Gradio demo to make AnimateDiff easier to use. To launch the demo, please run the following commands:
-```
-conda activate animatediff
-python app.py
-```
-By default, the demo will run at `localhost:7860`.
-<br><img src="__assets__/figs/gradio.jpg" style="width: 50em; margin-top: 1em">
+[//]: # (### Dataset)
 
+[//]: # (Before training, download the videos files and the `.csv` annotations of [WebVid10M]&#40;https://maxbain.com/webvid-dataset/&#41; to the local mechine.)
+
+[//]: # (Note that our examplar training script requires all the videos to be saved in a single folder. You may change this by modifying `animatediff/data/dataset.py`.)
+
+[//]: # ()
+[//]: # (### Configuration)
+
+[//]: # (After dataset preparations, update the below data paths in the config `.yaml` files in `configs/training/` folder:)
+
+[//]: # (```)
+
+[//]: # (train_data:)
+
+[//]: # (  csv_path:     [Replace with .csv Annotation File Path])
+
+[//]: # (  video_folder: [Replace with Video Folder Path])
+
+[//]: # (  sample_size:  256)
+
+[//]: # (```)
+
+[//]: # (Other training parameters &#40;lr, epochs, validation settings, etc.&#41; are also included in the config files.)
+
+[//]: # ()
+[//]: # (### Training)
+
+[//]: # (To train motion modules)
+
+[//]: # (```)
+
+[//]: # (torchrun --nnodes=1 --nproc_per_node=1 train.py --config configs/training/training.yaml)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (To finetune the unet's image layers)
+
+[//]: # (```)
+
+[//]: # (torchrun --nnodes=1 --nproc_per_node=1 train.py --config configs/training/image_finetune.yaml)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # ()
+[//]: # (## Gradio Demo)
+
+[//]: # (We have created a Gradio demo to make AnimateDiff easier to use. To launch the demo, please run the following commands:)
+
+[//]: # (```)
+
+[//]: # (conda activate animatediff)
+
+[//]: # (python app.py)
+
+[//]: # (```)
+
+[//]: # (By default, the demo will run at `localhost:7860`.)
+
+[//]: # (<br><img src="__assets__/figs/gradio.jpg" style="width: 50em; margin-top: 1em">)
+
+[//]: # ()
 ## Gallery
 Here we demonstrate several best results we found in our experiments.
 
@@ -257,36 +288,60 @@ Here we demonstrate several best results we found in our experiments.
 </table>
 <p style="margin-left: 2em; margin-top: -1em">Model：<a href="https://civitai.com/models/33208/filmgirl-film-grain-lora-and-loha">FilmVelvia</a></p>
 
-#### Community Cases
-Here are some samples contributed by the community artists. Create a Pull Request if you would like to show your results here😚.
+[//]: # (#### Community Cases)
 
-<table>
-    <tr>
-    <td><img src="__assets__/animations/model_07/init.jpg"></td>
-    <td><img src="__assets__/animations/model_07/01.gif"></td>
-    <td><img src="__assets__/animations/model_07/02.gif"></td>
-    <td><img src="__assets__/animations/model_07/03.gif"></td>
-    <td><img src="__assets__/animations/model_07/04.gif"></td>
-    </tr>
-</table>
-<p style="margin-left: 2em; margin-top: -1em">
-Character Model：<a href="https://civitai.com/models/13237/genshen-impact-yoimiya">Yoimiya</a> 
-(with an initial reference image, see <a href="https://github.com/talesofai/AnimateDiff">WIP fork</a> for the extended implementation.)
+[//]: # (Here are some samples contributed by the community artists. Create a Pull Request if you would like to show your results here😚.)
 
+[//]: # ()
+[//]: # (<table>)
 
-<table>
-    <tr>
-    <td><img src="__assets__/animations/model_08/01.gif"></td>
-    <td><img src="__assets__/animations/model_08/02.gif"></td>
-    <td><img src="__assets__/animations/model_08/03.gif"></td>
-    <td><img src="__assets__/animations/model_08/04.gif"></td>
-    </tr>
-</table>
-<p style="margin-left: 2em; margin-top: -1em">
-Character Model：<a href="https://civitai.com/models/9850/paimon-genshin-impact">Paimon</a>;
-Pose Model：<a href="https://civitai.com/models/107295/or-holdingsign">Hold Sign</a></p>
+[//]: # (    <tr>)
 
-## BibTeX
+[//]: # (    <td><img src="__assets__/animations/model_07/init.jpg"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_07/01.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_07/02.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_07/03.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_07/04.gif"></td>)
+
+[//]: # (    </tr>)
+
+[//]: # (</table>)
+
+[//]: # (<p style="margin-left: 2em; margin-top: -1em">)
+
+[//]: # (Character Model：<a href="https://civitai.com/models/13237/genshen-impact-yoimiya">Yoimiya</a> )
+
+[//]: # (&#40;with an initial reference image, see <a href="https://github.com/talesofai/AnimateDiff">WIP fork</a> for the extended implementation.&#41;)
+
+[//]: # ()
+[//]: # ()
+[//]: # (<table>)
+
+[//]: # (    <tr>)
+
+[//]: # (    <td><img src="__assets__/animations/model_08/01.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_08/02.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_08/03.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_08/04.gif"></td>)
+
+[//]: # (    </tr>)
+
+[//]: # (</table>)
+
+[//]: # (<p style="margin-left: 2em; margin-top: -1em">)
+
+[//]: # (Character Model：<a href="https://civitai.com/models/9850/paimon-genshin-impact">Paimon</a>;)
+
+[//]: # (Pose Model：<a href="https://civitai.com/models/107295/or-holdingsign">Hold Sign</a></p>)
+
+## BibTeX for AnimateDiff
 ```
 @article{guo2023animatediff,
   title={AnimateDiff: Animate Your Personalized Text-to-Image Diffusion Models without Specific Tuning},
@@ -296,10 +351,10 @@ Pose Model：<a href="https://civitai.com/models/107295/or-holdingsign">Hold Sig
 }
 ```
 
-## Contact Us
+## Contact Authors of AnimateDiff 
 **Yuwei Guo**: [guoyuwei@pjlab.org.cn](mailto:guoyuwei@pjlab.org.cn)  
 **Ceyuan Yang**: [yangceyuan@pjlab.org.cn](mailto:yangceyuan@pjlab.org.cn)  
 **Bo Dai**: [daibo@pjlab.org.cn](mailto:daibo@pjlab.org.cn)
 
-## Acknowledgements
+## Acknowledgements from Authors of AnimateDiff
 Codebase built upon [Tune-a-Video](https://github.com/showlab/Tune-A-Video).
