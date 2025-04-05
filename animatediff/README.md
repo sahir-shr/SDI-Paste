@@ -92,6 +92,14 @@ cd AnimateDiff
 
 conda env create -f environment.yaml
 conda activate animatediff
+pip install huggingface-hub==0.25.2
+pip install numpy==1.26.0
+
+pip install ftfy regex tqdm
+pip install git+https://github.com/openai/CLIP.git
+
+
+
 ```
 
 ### Download Base T2I & Motion Module Checkpoints
@@ -128,7 +136,7 @@ bash download_bashscripts/8-GhibliBackground.sh
 ### Inference
 After downloading the above peronalized T2I checkpoints, run the following commands to generate animations. The results will automatically be saved to `samples/` folder.
 ```
-python -m scripts.animate --config configs/prompts/5-RealisticVision.yaml
+python -m scripts.animate_sdipaste --config configs/prompts/5-RealisticVision.yaml
 ```
 
 To generate animations with a new DreamBooth/LoRA model, you may create a new config `.yaml` file in the following format:

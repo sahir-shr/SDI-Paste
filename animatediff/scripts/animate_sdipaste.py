@@ -137,16 +137,16 @@ def get_clip_scores(images: torch.Tensor, prompt, clip_model, preprocess):
     logits_per_text = logits_per_text.view(-1).cpu().tolist()
     return logits_per_text
 
-def make_prompts(object_metadata, num_prompts):
-    obj_type = object_metadata["type"]
-    obj_name = object_metadata["name"]
-    # num_prompts = 10
-    prompts = []
-    for idx in range(num_prompts):
-        adjective = random.choice(VXPASTE_ADJECTIVES[obj_type])
-        action = random.choice(VXPASTE_ACTION[obj_type])
-        prompts.append(f"a close up video of a {action} {adjective} {obj_name}, centred")
-    return prompts
+# def make_prompts(object_metadata, num_prompts):
+#     obj_type = object_metadata["type"]
+#     obj_name = object_metadata["name"]
+#     # num_prompts = 10
+#     prompts = []
+#     for idx in range(num_prompts):
+#         adjective = random.choice(VXPASTE_ADJECTIVES[obj_type])
+#         action = random.choice(VXPASTE_ACTION[obj_type])
+#         prompts.append(f"a close up video of a {action} {adjective} {obj_name}, centred")
+#     return prompts
 
 
 
@@ -163,6 +163,8 @@ def main(args):
     clip_model, preprocess = clip.load("ViT-L/14")
 
     config  = OmegaConf.load(args.config)
+
+    # variables to be user-defined
     # samples = []
     
     # sample_idx = 0
@@ -243,34 +245,30 @@ def main(args):
             
             config[config_key].random_seed = []
             # for prompt_idx, (prompt, n_prompt, random_seed) in enumerate(zip(prompts, n_prompts, random_seeds)):
-            num_prompts = 470 # 150
-            n_prompts = n_prompts * num_prompts
+            n_prompts = n_prompts * args.num_scenes
             random_seeds = model_config.get("seed", [-1])
             random_seeds = [random_seeds] if isinstance(random_seeds, int) else list(random_seeds)
-            random_seeds = random_seeds * num_prompts if len(random_seeds) == 1 else random_seeds
+            random_seeds = random_seeds * args.num_scenes if len(random_seeds) == 1 else random_seeds
             for object_metadata in YTVIS_CATEGORIES_2021:
                 object_class = object_metadata["name"]
                 object_id = object_metadata["id"]
-                if int(object_id) < 25:
-                    continue
+                # if int(object_id) < 25:
+                #     continue
                 # prompts = make_prompts(object_metadata, num_prompts)
 
-                # prompts = [f"a close up of running {object_class}, centred", f"a close up of a flying {object_class}, centred"]
                 prompts = [f"a close up of one moving dynamic {object_class} in changing background, moving camera, centred"]
-                # num_prompts = 10
-                prompts = [p for p in prompts for _ in range(num_prompts)]
-                # print(f'prompts: {prompts}')
-                # exit()
+                prompts = [p for p in prompts for _ in range(args.num_scenes)]
 
 
-                class_dir = f"VXpaste/youtube_vis_470/{object_class}"
+                # class_dir = f"VXpaste/youtube_vis_470/{object_class}"
+                class_dir = f"./samples/{object_class}"
                 # class_dir = f"VXpaste/youtube_vis/bird_test"
                 if not os.path.exists(class_dir):
                     os.makedirs(class_dir)
                 for prompt_idx, (prompt, n_prompt, random_seed) in enumerate(zip(prompts, n_prompts, random_seeds)):
                     # if prompt_idx < 61:
                     #     continue
-                    print(f'prompt idx: {prompt_idx} of {len(prompts)}')
+                    print(f'Generating prompt idx: {prompt_idx} of {len(prompts)}')
                     savedir = os.path.join(class_dir, f'{prompt_idx}')
                     if not os.path.exists(savedir):
                         os.makedirs(savedir)
@@ -299,7 +297,7 @@ def main(args):
                     prompt = "-".join((prompt.replace("/", "").split(" ")[:10]))
                     # obj_class = "ape"
                     save_videos_frames(sample, savedir, object_class)
-                    print(f"save to {savedir}")
+                    print(f"Saving to {savedir}")
                     # save_videos_grid(sample, f"{savedir}/sample/{sample_idx}-{prompt}.gif")
                     # print(f"save to {savedir}/sample/{prompt}.gif")
 
@@ -329,10 +327,11 @@ if __name__ == "__main__":
     parser.add_argument("--pretrained_model_path", type=str, default="models/StableDiffusion",)
     parser.add_argument("--inference_config",      type=str, default="configs/inference/inference-v1.yaml")    
     parser.add_argument("--config",                type=str, required=True)
-    
+
     parser.add_argument("--L", type=int, default=16 )
     parser.add_argument("--W", type=int, default=512)
     parser.add_argument("--H", type=int, default=512)
+    parser.add_argument("--num_scenes", type=int, required=True, default=470)
 
     args = parser.parse_args()
     main(args)

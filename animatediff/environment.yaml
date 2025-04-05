@@ -1,4 +1,4 @@
-name: animatediff
+name: animatediff-sdipaste
 channels:
   - pytorch
   - nvidia
