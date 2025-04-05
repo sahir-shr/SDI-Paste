@@ -1,6 +1,6 @@
 # AnimateDiff
 
-This repository is sourced from the official implementation of [AnimateDiff](https://arxiv.org/abs/2307.04725) and has been modified for SDI-Paste. Thank you to Gao _et al._ for their incredible work.
+This repository is sourced from the official implementation of [AnimateDiff](https://arxiv.org/abs/2307.04725) and has been modified for SDI-Paste. Please see the original repo if you wish to train/finetune AnimateDiff. For SDI-Paste, we will make use of pre-trained models only. Thank you to Gao _et al._ for their incredible work.
 
 **[AnimateDiff: Animate Your Personalized Text-to-Image Diffusion Models without Specific Tuning](https://arxiv.org/abs/2307.04725)**
 </br>
@@ -80,30 +80,32 @@ Contributions are always welcome!! The <code>dev</code> branch is for community 
 </details>
 
 
-## Setups for Inference
+## Setups for Generating Dynamic Instances using AnimateDiff
 
 ### Prepare Environment
 
 ***We updated our inference code with xformers and a sequential decoding trick. Now AnimateDiff takes only ~12GB VRAM to inference, and run on a single RTX3090 !!***
 
+
+[//]: # (git clone https://github.com/guoyww/AnimateDiff.git)
+[//]: # (cd AnimateDiff)
 ```
-git clone https://github.com/guoyww/AnimateDiff.git
-cd AnimateDiff
 
 conda env create -f environment.yaml
 conda activate animatediff
 pip install huggingface-hub==0.25.2
-pip install numpy==1.26.0
-
+pip install numpy==1.26.0 
+```
+Install CLIP:
+```
 pip install ftfy regex tqdm
 pip install git+https://github.com/openai/CLIP.git
-
 
 
 ```
 
 ### Download Base T2I & Motion Module Checkpoints
-We provide two versions of our Motion Module, which are trained on stable-diffusion-v1-4 and finetuned on v1-5 seperately.
+There are two versions of Motion Modules provided by AnimateDiff, which are trained on stable-diffusion-v1-4 and finetuned on v1-5 seperately.
 It's recommanded to try both of them for best results.
 ```
 git lfs install
@@ -117,7 +119,7 @@ You may also directly download the motion module checkpoints from [Google Drive]
 
 [//]: # (Here we provide inference configs for 6 demo T2I on CivitAI.)
 
-We use the 5-RealisticVision style T2I checkpoint to generate the most realistic-looking instances.
+We use the 5-RealisticVision style T2I checkpoint to generate the most realistic-looking object instances.
 You may run the following bash scripts to download the checkpoint.
 ```
 bash download_bashscripts/5-RealisticVision.sh
@@ -134,9 +136,9 @@ bash download_bashscripts/8-GhibliBackground.sh
 ```
 
 ### Inference
-After downloading the above peronalized T2I checkpoints, run the following commands to generate animations. The results will automatically be saved to `samples/` folder.
+After downloading the above peronalized T2I checkpoints, run the following commands to generate dynamic object instances. The results will automatically be saved to `samples/` folder where subfolders named according to the 40 class labels in VIS will be created. Please also set the number of scenes you want for each object category with `--num_scenes`.
 ```
-python -m scripts.animate_sdipaste --config configs/prompts/5-RealisticVision.yaml
+python -m scripts.animate_sdipaste --config configs/prompts/5-RealisticVision.yaml --num_scenes 470
 ```
 
 To generate animations with a new DreamBooth/LoRA model, you may create a new config `.yaml` file in the following format:
@@ -160,7 +162,7 @@ NewModel:
 ```
 Then run the following commands:
 ```
-python -m scripts.animate_sdipaste --config [path to the config file]
+python -m scripts.animate_sdipaste --config [path to the config file] --num_scens [number of required scenes for each object category]
 ```
 
 
@@ -236,25 +238,41 @@ If you want to train AnimateDiff from scratch, please see instructions on the or
 ## Gallery
 Here we demonstrate several best results we found in our experiments.
 
-<table class="center">
-    <tr>
-    <td><img src="__assets__/animations/model_01/01.gif"></td>
-    <td><img src="__assets__/animations/model_01/02.gif"></td>
-    <td><img src="__assets__/animations/model_01/03.gif"></td>
-    <td><img src="__assets__/animations/model_01/04.gif"></td>
-    </tr>
-</table>
-<p style="margin-left: 2em; margin-top: -1em">Model：<a href="https://civitai.com/models/30240/toonyou">ToonYou</a></p>
+[//]: # (<table class="center">)
 
-<table>
-    <tr>
-    <td><img src="__assets__/animations/model_02/01.gif"></td>
-    <td><img src="__assets__/animations/model_02/02.gif"></td>
-    <td><img src="__assets__/animations/model_02/03.gif"></td>
-    <td><img src="__assets__/animations/model_02/04.gif"></td>
-    </tr>
-</table>
-<p style="margin-left: 2em; margin-top: -1em">Model：<a href="https://civitai.com/models/4468/counterfeit-v30">Counterfeit V3.0</a></p>
+[//]: # (    <tr>)
+
+[//]: # (    <td><img src="__assets__/animations/model_01/01.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_01/02.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_01/03.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_01/04.gif"></td>)
+
+[//]: # (    </tr>)
+
+[//]: # (</table>)
+
+[//]: # (<p style="margin-left: 2em; margin-top: -1em">Model：<a href="https://civitai.com/models/30240/toonyou">ToonYou</a></p>)
+
+[//]: # (<table>)
+
+[//]: # (    <tr>)
+
+[//]: # (    <td><img src="__assets__/animations/model_02/01.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_02/02.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_02/03.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_02/04.gif"></td>)
+
+[//]: # (    </tr>)
+
+[//]: # (</table>)
+
+[//]: # (<p style="margin-left: 2em; margin-top: -1em">Model：<a href="https://civitai.com/models/4468/counterfeit-v30">Counterfeit V3.0</a></p>)
 
 <table>
     <tr>
@@ -266,35 +284,61 @@ Here we demonstrate several best results we found in our experiments.
 </table>
 <p style="margin-left: 2em; margin-top: -1em">Model：<a href="https://civitai.com/models/4201/realistic-vision-v20">Realistic Vision V2.0</a></p>
 
-<table>
-    <tr>
-    <td><img src="__assets__/animations/model_04/01.gif"></td>
-    <td><img src="__assets__/animations/model_04/02.gif"></td>
-    <td><img src="__assets__/animations/model_04/03.gif"></td>
-    <td><img src="__assets__/animations/model_04/04.gif"></td>
-    </tr>
-</table>
-<p style="margin-left: 2em; margin-top: -1em">Model： <a href="https://civitai.com/models/43331/majicmix-realistic">majicMIX Realistic</a></p>
+[//]: # (<table>)
 
-<table>
-    <tr>
-    <td><img src="__assets__/animations/model_05/01.gif"></td>
-    <td><img src="__assets__/animations/model_05/02.gif"></td>
-    <td><img src="__assets__/animations/model_05/03.gif"></td>
-    <td><img src="__assets__/animations/model_05/04.gif"></td>
-    </tr>
-</table>
-<p style="margin-left: 2em; margin-top: -1em">Model：<a href="https://civitai.com/models/66347/rcnz-cartoon-3d">RCNZ Cartoon</a></p>
+[//]: # (    <tr>)
 
-<table>
-    <tr>
-    <td><img src="__assets__/animations/model_06/01.gif"></td>
-    <td><img src="__assets__/animations/model_06/02.gif"></td>
-    <td><img src="__assets__/animations/model_06/03.gif"></td>
-    <td><img src="__assets__/animations/model_06/04.gif"></td>
-    </tr>
-</table>
-<p style="margin-left: 2em; margin-top: -1em">Model：<a href="https://civitai.com/models/33208/filmgirl-film-grain-lora-and-loha">FilmVelvia</a></p>
+[//]: # (    <td><img src="__assets__/animations/model_04/01.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_04/02.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_04/03.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_04/04.gif"></td>)
+
+[//]: # (    </tr>)
+
+[//]: # (</table>)
+
+[//]: # (<p style="margin-left: 2em; margin-top: -1em">Model： <a href="https://civitai.com/models/43331/majicmix-realistic">majicMIX Realistic</a></p>)
+
+[//]: # ()
+[//]: # (<table>)
+
+[//]: # (    <tr>)
+
+[//]: # (    <td><img src="__assets__/animations/model_05/01.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_05/02.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_05/03.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_05/04.gif"></td>)
+
+[//]: # (    </tr>)
+
+[//]: # (</table>)
+
+[//]: # (<p style="margin-left: 2em; margin-top: -1em">Model：<a href="https://civitai.com/models/66347/rcnz-cartoon-3d">RCNZ Cartoon</a></p>)
+
+[//]: # ()
+[//]: # (<table>)
+
+[//]: # (    <tr>)
+
+[//]: # (    <td><img src="__assets__/animations/model_06/01.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_06/02.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_06/03.gif"></td>)
+
+[//]: # (    <td><img src="__assets__/animations/model_06/04.gif"></td>)
+
+[//]: # (    </tr>)
+
+[//]: # (</table>)
+
+[//]: # (<p style="margin-left: 2em; margin-top: -1em">Model：<a href="https://civitai.com/models/33208/filmgirl-film-grain-lora-and-loha">FilmVelvia</a></p>)
 
 [//]: # (#### Community Cases)
 
@@ -364,5 +408,5 @@ Here we demonstrate several best results we found in our experiments.
 **Ceyuan Yang**: [yangceyuan@pjlab.org.cn](mailto:yangceyuan@pjlab.org.cn)  
 **Bo Dai**: [daibo@pjlab.org.cn](mailto:daibo@pjlab.org.cn)
 
-## Acknowledgements from Authors of AnimateDiff
-Codebase built upon [Tune-a-Video](https://github.com/showlab/Tune-A-Video).
+## Acknowledgements 
+AnimateDiff Codebase built upon [Tune-a-Video](https://github.com/showlab/Tune-A-Video).
