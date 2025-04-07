@@ -19,7 +19,8 @@ This repository is the official implementation of [SDI-Paste](https://arxiv.org/
 
 
 SDI-Paste works in two parts: 
-    1. Generation of Synthetic Video Dataset
+    1. Generation of Synthetic Dynamic Object Instances 
+    2. Foreground Segmentation of Dynamic Object Instances 
     2. Training of VIS Model
 
 Instruction for each of the parts can be found in the README inside the corresponding folders.
@@ -87,7 +88,7 @@ After downloading the above peronalized T2I checkpoints, run the following comma
 python -m scripts.animate_sdipaste --config configs/prompts/5-RealisticVision.yaml --num_scenes 470
 ```
 
-## 2. Train VIS model
+## 2. Extract foreground object instance using TokenCut 
 
 
 ## Acknowledgements
