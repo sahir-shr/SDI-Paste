@@ -276,10 +276,10 @@ Here we demonstrate several best results we found in our experiments.
 
 <table>
     <tr>
-    <td><img src="__assets__/animations/model_03/01.gif"></td>
-    <td><img src="__assets__/animations/model_03/02.gif"></td>
-    <td><img src="__assets__/animations/model_03/03.gif"></td>
-    <td><img src="__assets__/animations/model_03/04.gif"></td>
+    <td><img src="__assets__/animations/sdi-paste/dog23.gif"></td>
+    <td><img src="__assets__/animations/sdi-paste/fish27.gif"></td>
+    <td><img src="__assets__/animations/sdi-paste/rabbit80.gif"></td>
+    <td><img src="__assets__/animations/sdi-paste/zebra77.gif"></td>
     </tr>
 </table>
 <p style="margin-left: 2em; margin-top: -1em">Model：<a href="https://civitai.com/models/4201/realistic-vision-v20">Realistic Vision V2.0</a></p>
