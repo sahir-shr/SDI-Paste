@@ -279,7 +279,8 @@ Here we demonstrate several best results we found in our experiments.
     <td><img src="__assets__/animations/sdi-paste/dog23.gif"></td>
     <td><img src="__assets__/animations/sdi-paste/fish27.gif"></td>
     <td><img src="__assets__/animations/sdi-paste/rabbit80.gif"></td>
-    <td><img src="__assets__/animations/sdi-paste/zebra77.gif"></td>
+    <td><img src="__assets__/animations/sdi-paste/zebra200.gif"></td>
+    <td><img src="__assets__/animations/sdi-paste/fox20.gif"></td>
     </tr>
 </table>
 <p style="margin-left: 2em; margin-top: -1em">Model：<a href="https://civitai.com/models/4201/realistic-vision-v20">Realistic Vision V2.0</a></p>
