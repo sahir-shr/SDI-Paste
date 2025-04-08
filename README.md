@@ -14,6 +14,16 @@
 </table>
 <p style="margin-left: 2em; margin-top: -1em">Generated dynamic object instances using AnimateDiff: <a href="https://civitai.com/models/4201/realistic-vision-v20">Realistic Vision V2.0</a></p>
 
+<table>
+    <tr>
+    <td><img src="animatediff/__assets__/animations/segmented_tokencut/dog23_tokencut.gif"></td>
+    <td><img src="animatediff/__assets__/animations/segmented_tokencut/fish27_tokencut.gif"></td>
+    <td><img src="animatediff/__assets__/animations/segmented_tokencut/rabbit80_tokencut.gif"></td>
+    <td><img src="animatediff/__assets__/animations/segmented_tokencut/zebra200_tokencut.gif"></td>
+    <td><img src="animatediff/__assets__/animations/segmented_tokencut/fox20_tokencut.gif"></td>
+    </tr>
+</table>
+<p style="margin-left: 2em; margin-top: -1em">Extracted foreground dynamic object instances using <a href="https://github.com/YangtaoWANG95/TokenCut">TokenCut</a></p>
 
 This repository is the official implementation of [SDI-Paste](https://arxiv.org/pdf/2410.13565) - a generative data augmentation regime for Video Instance Segmentation.
 
@@ -28,9 +38,6 @@ Instruction for each of the parts can be found in the README inside the correspo
 Please cite our paper if this repository has been helpful for your research endeavours.
 
 Happy coding!
-
-## 1. Generate Dynamic Object Intances using AnimateDiff
-This section is sourced from the official implementation of [AnimateDiff](https://github.com/guoyww/AnimateDiff) and has been modified for SDI-Paste. Please see the original repo if you wish to train/finetune AnimateDiff. For SDI-Paste, we will make use of pre-trained models only. Thank you to Gao _et al._ for their incredible work.
 
 ### Prepare Environment
 
@@ -50,6 +57,10 @@ Install CLIP:
 pip install ftfy regex tqdm
 pip install git+https://github.com/openai/CLIP.git 
 ```
+
+## 1. Generate Dynamic Object Intances using AnimateDiff
+This section is sourced from the official implementation of [AnimateDiff](https://github.com/guoyww/AnimateDiff) and has been modified for SDI-Paste. Please see the original repo if you wish to train/finetune AnimateDiff. For SDI-Paste, we will make use of pre-trained models only. Thank you to Gao _et al._ for their incredible work.
+
 
 ### Download Base T2I & Motion Module Checkpoints
 There are two versions of Motion Modules provided by AnimateDiff, which are trained on stable-diffusion-v1-4 and finetuned on v1-5 seperately.
@@ -71,24 +82,43 @@ You may run the following bash scripts to download the checkpoint.
 ```
 bash download_bashscripts/5-RealisticVision.sh
 ```
-Other styles are also available [See [AnimateDiff repo](https://github.com/guoyww/AnimateDiff)] 
-```
-bash download_bashscripts/1-ToonYou.sh
-bash download_bashscripts/2-Lyriel.sh
-bash download_bashscripts/3-RcnzCartoon.sh
-bash download_bashscripts/4-MajicMix.sh
-bash download_bashscripts/6-Tusun.sh
-bash download_bashscripts/7-FilmVelvia.sh
-bash download_bashscripts/8-GhibliBackground.sh
-```
 
-### Inference
-After downloading the above peronalized T2I checkpoints, run the following commands to generate dynamic object instances. The results will automatically be saved to `samples/` folder where subfolders named according to the 40 class labels in VIS will be created. Please also set the number of scenes you want for each object category with `--num_scenes`.
+[//]: # (Other styles are also available [See [AnimateDiff repo]&#40;https://github.com/guoyww/AnimateDiff&#41;] )
+
+[//]: # (```)
+
+[//]: # (bash download_bashscripts/1-ToonYou.sh)
+
+[//]: # (bash download_bashscripts/2-Lyriel.sh)
+
+[//]: # (bash download_bashscripts/3-RcnzCartoon.sh)
+
+[//]: # (bash download_bashscripts/4-MajicMix.sh)
+
+[//]: # (bash download_bashscripts/6-Tusun.sh)
+
+[//]: # (bash download_bashscripts/7-FilmVelvia.sh)
+
+[//]: # (bash download_bashscripts/8-GhibliBackground.sh)
+
+[//]: # (```)
+
+### Generate object instances and then segment them using Tokencut:
+Run the `generate.sh` file to generate dynamic object instances. The results will automatically be saved to `animatediff/samples/` folder where subfolders named according to the 40 class labels in VIS will be created. Please also set the number of scenes you want for each object category with `--num_scenes` inside the `generate.sh`.
+
+[//]: # (python -m scripts.animate_sdipaste --config configs/prompts/5-RealisticVision.yaml --num_scenes 470)
 ```
-python -m scripts.animate_sdipaste --config configs/prompts/5-RealisticVision.yaml --num_scenes 470
+bash generate.sh
 ```
 
 ## 2. Extract foreground object instance using TokenCut 
+We use TokenCut to extract and filter (using CLIP) foreground objects from the generated dynamic object instances. Extracted foregrounds will be saved in `TokenCut/segmented_samples/`:
+
+```
+bash extract_foreground.sh
+```
+
+## 3. Compose 
 
 
 ## Acknowledgements

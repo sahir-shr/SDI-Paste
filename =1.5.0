@@ -1,9 +1,0 @@
-Collecting scipy
-  Obtaining dependency information for scipy from https://files.pythonhosted.org/packages/de/3c/c96d904b9892beec978562f64d8cc43f9cca0842e65bd3cd1b7f7389b0ba/scipy-1.15.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
-  Downloading scipy-1.15.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (61 kB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.0/62.0 kB 4.8 MB/s eta 0:00:00
-Requirement already satisfied: numpy<2.5,>=1.23.5 in /home/users/u6566739/apps/anaconda3/envs/animatediff/lib/python3.10/site-packages (from scipy) (1.24.3)
-Downloading scipy-1.15.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (37.6 MB)
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 37.6/37.6 MB 17.1 MB/s eta 0:00:00
-Installing collected packages: scipy
-Successfully installed scipy-1.15.2
