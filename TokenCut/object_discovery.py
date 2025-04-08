@@ -22,7 +22,7 @@ def ncut(feats, dims, scales, init_image_size, tau = 0, eps=1e-5, im_name='', no
       im_name: image_name
       no_binary_graph: ablation study for using similarity score as graph edge weight
     """
-    cls_token = feats[0,0:1,:].cpu().numpy() 
+    # cls_token = feats[0,0:1,:].cpu().numpy()
 
     feats = feats[0,1:,:]
     feats = F.normalize(feats, p=2)

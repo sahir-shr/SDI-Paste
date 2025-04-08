@@ -13,7 +13,6 @@ for i, (img, box) in enumerate(zip(dict["image_files"],dict["bboxes"])):
     image_path = os.path.join(root, img)
     img = Image.open(os.path.join(image_path)).convert("RGB")
     print(f'img size: {img.size} {box}')
-    exit()
     x1, y1, x2, y2 = box
     if (x2<x1) or (y2<y1):
         count += 1

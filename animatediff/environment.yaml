@@ -21,3 +21,7 @@ dependencies:
     - safetensors
     - gradio
     - wandb
+    - scipy
+    - scikit-image
+    - opencv-python
+    - matplotlib

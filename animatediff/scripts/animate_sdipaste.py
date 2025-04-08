@@ -18,11 +18,11 @@ from transformers import CLIPTextModel, CLIPTokenizer
 
 # export PYTHONPATH="${PYTHONPATH}:/home/users/u6566739/project-004/XPaste"
 
-from animatediff.models.unet import UNet3DConditionModel
-from animatediff.pipelines.pipeline_animation import AnimationPipeline
-from animatediff.utils.util import save_videos_grid, save_videos_frames
-from animatediff.utils.convert_from_ckpt import convert_ldm_unet_checkpoint, convert_ldm_clip_checkpoint, convert_ldm_vae_checkpoint
-from animatediff.utils.convert_lora_safetensor_to_diffusers import convert_lora
+from animatediff.animatediff.models.unet import UNet3DConditionModel
+from animatediff.animatediff.pipelines.pipeline_animation import AnimationPipeline
+from animatediff.animatediff.utils.util import save_videos_grid, save_videos_frames
+from animatediff.animatediff.utils.convert_from_ckpt import convert_ldm_unet_checkpoint, convert_ldm_clip_checkpoint, convert_ldm_vae_checkpoint
+from animatediff.animatediff.utils.convert_lora_safetensor_to_diffusers import convert_lora
 from diffusers.utils.import_utils import is_xformers_available
 import clip
 import json
@@ -325,7 +325,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--pretrained_model_path", type=str, default="models/StableDiffusion",)
-    parser.add_argument("--inference_config",      type=str, default="configs/inference/inference-v1.yaml")    
+    parser.add_argument("--inference_config",      type=str, default="animatediff/configs/inference/inference-v1.yaml")
     parser.add_argument("--config",                type=str, required=True)
 
     parser.add_argument("--L", type=int, default=16 )
